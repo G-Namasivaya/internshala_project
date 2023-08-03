@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Inner Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Welcome to Inner Page</h2>
+        <?php
+        // Create a connection to MySQL database
+        $conn = new mysqli("localhost", "your_username", "your_password", "your_database_name");
+
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        // Fetch user details from the database
+        $sql = "SELECT * FROM users";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            // Output user details in a table
+            echo '<table class="table table-bordered">';
+            echo '<thead><tr><th>First Name</th><th>Last Name</th><th>Address</th><th>City</th><th>State</th>';
+            echo '<th>Email</th><th>Phone</th><th>Actions</th></tr></thead>';
+            echo '<tbody>';
+            while ($row = $result->fetch_assoc()) {
+                echo '<tr>';
+                echo '<td>' . $row["first_name"] . '</td>';
+                echo '<td>' . $row["last_name"] . '</td>';
+                echo '<td>' . $row["address"] . '</td>';
+                echo '<td>' . $row["city"] . '</td>';
+                echo '<td>' . $row["state"] . '</td>';
+                echo '<td>' . $row["email"] . '</td>';
+                echo '<td>' . $row["phone"] . '</td>';
+                echo '<td><a href="edit.php?id=' . $row["id"] . '">Edit</a> | <a href="delete.php?id=' . $row["id"] . '">Delete</a></td>';
+                echo '</tr>';
+            }
+            echo '</tbody></table>';
+        } else {
+            echo "No users found.";
+        }
+
+        // Close the connection
+        $conn->close();
+        ?>
+        <br>
+        <a href="logout.php">Logout</a>
+    </div>
+</body>
+
+</html>
